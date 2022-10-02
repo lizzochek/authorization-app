@@ -21,6 +21,38 @@
       <p v-if="passwordInvalid">
         Password has to be at least 8 characters long
       </p>
+
+      <div
+        v-if="registrationMode"
+        id="usr-data"
+      >
+        <input
+          type="text"
+          id="top"
+          placeholder="Full name"
+          v-model="name"
+        />
+        <input
+          type="text"
+          placeholder="Group"
+          v-model="group"
+        />
+        <input
+          type="text"
+          placeholder="Phone number"
+          v-model="phone"
+        />
+        <input
+          type="text"
+          placeholder="ID card"
+          v-model="idCard"
+        />
+        <input
+          type="text"
+          placeholder="Faculty"
+          v-model="faculty"
+        />
+      </div>
       <button type="submit">Submit</button>
 
       <div id="register-link">
@@ -49,6 +81,11 @@
         password: '',
         emailInvalid: false,
         passwordInvalid: false,
+        name: '',
+        group: '',
+        phone: '',
+        idCard: '',
+        faculty: '',
       };
     },
     computed: {
@@ -91,7 +128,6 @@
         }
 
         const { password, admin, userInfo } = this.currentUser;
-
         if (password == this.password) {
           if (admin) this.$router.push('/users');
           else this.$router.push('/info');
@@ -101,7 +137,30 @@
         }
       },
       async onRegister() {
-        console.log('On register');
+        this.$store.dispatch('getCurrentUser', this.email);
+        const user = this.$store.getters.getCurUser;
+        if (user) {
+          swal('User with this email already exists. Please log in instead');
+          this.registrationMode = false;
+          return;
+        }
+
+        const data = {
+          email: this.email,
+          password: this.password,
+          admin: false,
+          userInfo: {
+            name: this.name,
+            group: this.group,
+            phone: this.phone,
+            idCard: this.idCard,
+            faculty: this.faculty,
+          },
+        };
+
+        this.$store.dispatch('createUser', data);
+        this.$store.dispatch('setCurrentUser', data);
+        this.$router.push('/info');
       },
     },
     mounted() {
@@ -110,7 +169,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   form {
     padding: 25px;
     background: #fbe9f8;
@@ -184,5 +243,9 @@
   #register-link #link {
     color: blue;
     cursor: pointer;
+  }
+
+  #usr-data input {
+    width: 95%;
   }
 </style>

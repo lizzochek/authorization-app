@@ -14,10 +14,10 @@ export default createStore({
     },
   },
   mutations: {
-    async fetchAllUsers() {
+    async fetchAllUsers(state) {
       const response = await fetch('/api/users');
       const users = await response.json();
-      this.state.users = users;
+      state.users = users;
     },
     async createUser(_, data) {
       const response = await fetch('/api/user', {
@@ -27,9 +27,12 @@ export default createStore({
       });
       return await response.json();
     },
-    async getCurrentUser(_, email) {
-      const user = this.state.users.find((el) => el.email === email);
+    async getCurrentUser(state, email) {
+      const user = state.users.find((el) => el.email === email);
       this.state.curUser = user;
+    },
+    setCurrentUser(state, data) {
+      state.curUser = data;
     },
   },
   actions: {
@@ -41,6 +44,9 @@ export default createStore({
     },
     getCurrentUser({ commit }, email) {
       commit('getCurrentUser', email);
+    },
+    setCurrentUser({ commit }, data) {
+      commit('setCurrentUser', data);
     },
   },
   modules: {},

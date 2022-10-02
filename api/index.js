@@ -32,7 +32,7 @@ app.get('/api/users', (req, res) => {
 app.post('/api/user', (req, res) => {
   const user = req.body.user;
   users.push(user);
-  res.sendStatus('OK');
+  res.json('User added');
 });
 
 //Get current user

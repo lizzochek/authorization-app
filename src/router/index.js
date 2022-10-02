@@ -22,6 +22,7 @@ const routes = [
     path: '/info',
     name: 'UserInfo',
     component: UserInfo,
+    props: true,
   },
 ];
 
