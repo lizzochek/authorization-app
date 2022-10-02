@@ -71,5 +71,4 @@ export default createStore({
       commit('fetchAllUsers');
     },
   },
-  modules: {},
 });

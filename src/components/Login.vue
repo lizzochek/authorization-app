@@ -11,14 +11,14 @@
         v-model="email"
         :class="emailInvalid ? 'invalid' : ''"
       />
-      <p v-if="emailInvalid">Please enter a valid email</p>
+      <p v-if="validation.emailInvalid">Please enter a valid email</p>
       <input
         type="text"
         placeholder="Password"
         v-model="password"
         :class="passwordInvalid ? 'invalid' : ''"
       />
-      <p v-if="passwordInvalid">
+      <p v-if="validation.passwordInvalid">
         Password has to be at least 8 characters long
       </p>
 
@@ -32,26 +32,42 @@
           placeholder="Full name"
           v-model="name"
         />
+
+        <p v-if="validation.nameInvalid">
+          Please enter full name in the format: Word L.L.
+        </p>
         <input
           type="text"
           placeholder="Group"
           v-model="group"
         />
+        <p v-if="validation.groupInvalid">
+          Please enter group in the format: LL-11
+        </p>
         <input
           type="text"
           placeholder="Phone number"
           v-model="phone"
         />
+        <p v-if="validation.phoneInvalid">
+          Please enter phone number in the format: (111)-111-11-11
+        </p>
         <input
           type="text"
           placeholder="ID card"
           v-model="idCard"
         />
+        <p v-if="validation.idInvalid">
+          Please enter id in the format: LL №111111
+        </p>
         <input
           type="text"
           placeholder="Faculty"
           v-model="faculty"
         />
+        <p v-if="validation.facultyInvalid">
+          Please enter faculty in the format: LLLL
+        </p>
       </div>
       <button type="submit">Submit</button>
 
@@ -79,13 +95,21 @@
         registrationMode: false,
         email: '',
         password: '',
-        emailInvalid: false,
-        passwordInvalid: false,
         name: '',
         group: '',
         phone: '',
         idCard: '',
         faculty: '',
+
+        validation: {
+          emailInvalid: false,
+          passwordInvalid: false,
+          nameInvalid: false,
+          groupInvalid: false,
+          phoneInvalid: false,
+          idInvalid: false,
+          facultyInvalid: false,
+        },
       };
     },
     computed: {
@@ -99,6 +123,7 @@
     methods: {
       toggleRegistation() {
         this.registrationMode = !this.registrationMode;
+        Object.keys(this.validation).map((el) => (this.validation[el] = false));
       },
       onFormSubmit(e) {
         e.preventDefault();
@@ -112,12 +137,27 @@
         this.registrationMode ? this.onRegister() : this.onLogin();
       },
       validateForm() {
-        const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-        const isEmailValid = this.email.search(emailRegExp);
-        const isPasswordValid = this.password.length >= 8;
-        if (isEmailValid === -1) this.emailInvalid = true;
-        if (!isPasswordValid) this.passwordInvalid = true;
-        if (this.emailInvalid || this.passwordInvalid) return false;
+        if (this.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) === -1)
+          this.validation.emailInvalid = true;
+        if (this.password.length < 8) this.validation.passwordInvalid = true;
+        if (this.name.search(/\w+\s+[A-Z]\.+[A-Z]\./) === -1)
+          this.validation.nameInvalid = true;
+        if (this.group.search(/[A-za-z][A-za-z]+\-+[0-9][0-9]/) === -1)
+          this.validation.groupInvalid = true;
+        if (
+          this.phone.search(/((\(\d{3}\) ?)|(\d{3}-))?\-\d{3}-\d{2}-\d{2}/) ===
+          -1
+        )
+          this.validation.phoneInvalid = true;
+        if (this.idCard.search(/[A-Z][A-Z]+\s+\№\d{6}/) === -1)
+          this.validation.idInvalid = true;
+        if (this.faculty.search(/[A-Z]{4}/) === -1)
+          this.validation.facultyInvalid = true;
+
+        const invalid = Object.values(this.validation).findIndex(
+          (el) => el === true
+        );
+        if (invalid >= 0) return false;
         return true;
       },
       onLogin() {
