@@ -37,6 +37,8 @@
 </template>
 
 <script>
+  import swal from 'sweetalert';
+
   export default {
     name: 'App',
     data() {
@@ -48,6 +50,14 @@
         emailInvalid: false,
         passwordInvalid: false,
       };
+    },
+    computed: {
+      users() {
+        return this.$store.getters.getUsers;
+      },
+      currentUser() {
+        return this.$store.getters.getCurUser;
+      },
     },
     methods: {
       toggleRegistation() {
@@ -70,16 +80,29 @@
         const isPasswordValid = this.password.length >= 8;
         if (isEmailValid === -1) this.emailInvalid = true;
         if (!isPasswordValid) this.passwordInvalid = true;
-        if(this.emailInvalid || this.passwordInvalid) return false;
+        if (this.emailInvalid || this.passwordInvalid) return false;
         return true;
       },
-      async onLogin() {
-      await this.$store.dispatch('getCurrentUser', this.email);
+      onLogin() {
+        this.$store.dispatch('getCurrentUser', this.email);
+        if (!this.currentUser) {
+          swal('There is no user with such email. Please register instead');
+          return;
+        }
 
+        if (this.currentUser.password == this.password) {
+          console.log('Authenticated');
+        } else {
+          swal('Your email or password is wrong. Please try again');
+          return;
+        }
       },
       async onRegister() {
-        console.log('One register');
+        console.log('On register');
       },
+    },
+    mounted() {
+      this.$store.dispatch('fetchAllUsers');
     },
   };
 </script>

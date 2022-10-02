@@ -8,7 +8,7 @@ const app = express(),
 const users = [
   {
     email: 'littled685@gmail.com',
-    password: '123456',
+    password: '123456789',
     admin: true,
     userInfo: {
       name: 'Liza',
@@ -38,8 +38,8 @@ app.post('/api/user', (req, res) => {
 //Get current user
 app.get('/api/current/:email', (req, res) => {
   const email = req.params.email;
-  if(!email) res.sendStatus(404);
-  const user = users.find(el => el.email === email);
+  const user = users.find((el) => el.email === email);
+  if (!user) res.json({});
   res.json(user);
 });
 

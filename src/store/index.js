@@ -28,11 +28,8 @@ export default createStore({
       return await response.json();
     },
     async getCurrentUser(_, email) {
-      const response = await fetch(`/api/current/${email}`);
-      // const user = await response.json();
-      if(response.ok === false) return null;
-      const user = await response.json();
-      this.curUser = user;
+      const user = this.state.users.find((el) => el.email === email);
+      this.state.curUser = user;
     },
   },
   actions: {
