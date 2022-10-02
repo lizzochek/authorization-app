@@ -12,8 +12,18 @@
       <p>ID card: {{ user.userInfo.idCard }}</p>
       <p>Faculty: {{ user.userInfo.faculty }}</p>
       <p v-if="user.admin">Admin</p>
-      <button v-if="!user.admin">Give admin rights</button>
-      <button v-if="!user.admin">Delete user</button>
+      <button
+        v-if="!user.admin"
+        @click="giveAdminRights(user.email)"
+      >
+        Give admin rights
+      </button>
+      <button
+        v-if="!user.admin"
+        @click="deleteUser(user.email)"
+      >
+        Delete user
+      </button>
     </div>
   </div>
 </template>
@@ -21,14 +31,21 @@
 <script>
   export default {
     name: 'UserList',
-    data() {
-      return {
-        users: [],
-      };
+    computed: {
+      users() {
+        return this.$store.getters.getUsers;
+      },
     },
     created() {
       this.$store.dispatch('fetchAllUsers');
-      this.users = this.$store.getters.getUsers;
+    },
+    methods: {
+      deleteUser(email) {
+        this.$store.dispatch('removeUser', email);
+      },
+      giveAdminRights(email) {
+        this.$store.dispatch('giveAdminRights', email);
+      },
     },
   };
 </script>

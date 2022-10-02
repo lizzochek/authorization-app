@@ -18,6 +18,18 @@ const users = [
       faculty: 'FICT',
     },
   },
+  {
+    email: 'anna@gmail.com',
+    password: '11111111',
+    admin: false,
+    userInfo: {
+      name: 'Anna',
+      group: 'IP-94',
+      phone: '123456788',
+      idCard: 'AB №123456',
+      faculty: 'FICT',
+    },
+  },
 ];
 
 app.use(bodyParser.json());
@@ -33,6 +45,22 @@ app.post('/api/user', (req, res) => {
   const user = req.body.user;
   users.push(user);
   res.json('User added');
+});
+
+//Remove user
+app.post('/api/delete', (req, res) => {
+  const email = req.body.email;
+  const index = users.findIndex((el) => el.email === email);
+  users.splice(index, 1);
+  res.json('User removed');
+});
+
+//Make admin
+app.post('/api/admin', (req, res) => {
+  const email = req.body.email;
+  const index = users.findIndex((el) => el.email === email);
+  if (index >= 0) users[index].admin = true;
+  res.json('Given admin rights');
 });
 
 //Get current user

@@ -31,6 +31,20 @@ export default createStore({
       const user = state.users.find((el) => el.email === email);
       this.state.curUser = user;
     },
+    async removeUser(_, email) {
+      await fetch('/api/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    },
+    async giveAdminRights(_, email) {
+      await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    },
     setCurrentUser(state, data) {
       state.curUser = data;
     },
@@ -47,6 +61,14 @@ export default createStore({
     },
     setCurrentUser({ commit }, data) {
       commit('setCurrentUser', data);
+    },
+    giveAdminRights({ commit }, email) {
+      commit('giveAdminRights', email);
+      commit('fetchAllUsers');
+    },
+    removeUser({ commit }, email) {
+      commit('removeUser', email);
+      commit('fetchAllUsers');
     },
   },
   modules: {},
