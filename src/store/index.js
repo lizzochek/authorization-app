@@ -56,7 +56,7 @@ export default createStore({
     setCurrentUser(state, data) {
       state.curUser = data;
     },
-    setAuthentication(state, isLoggedIn, admin) {
+    setAuthentication(state, { isLoggedIn, admin }) {
       state.isLoggedIn = isLoggedIn;
       state.isAdmin = admin;
     },
@@ -82,8 +82,8 @@ export default createStore({
       commit('removeUser', email);
       commit('fetchAllUsers');
     },
-    setAuthentication({ commit }, isLoggedIn, admin) {
-      commit('setAuthentication', isLoggedIn, admin);
+    setAuthentication({ commit }, { isLoggedIn, admin }) {
+      commit('setAuthentication', { isLoggedIn, admin });
     },
   },
 });

@@ -173,7 +173,10 @@
 
         const { password, admin, userInfo } = this.currentUser;
         if (password == this.password) {
-          this.$store.setAuthentication(true, admin);
+          this.$store.dispatch('setAuthentication', {
+            isLoggedIn: true,
+            admin,
+          });
           if (admin) this.$router.push('/users');
           else this.$router.push('/info');
         } else {
@@ -205,7 +208,10 @@
 
         this.$store.dispatch('createUser', data);
         this.$store.dispatch('setCurrentUser', data);
-        this.$store.dispatch('setAuthentication', true, false);
+        this.$store.dispatch('setAuthentication', {
+          isLoggedIn: true,
+          admin: false,
+        });
         this.$router.push('/info');
       },
     },

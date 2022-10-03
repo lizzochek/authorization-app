@@ -89,4 +89,10 @@
     background: #bd5195;
     cursor: pointer;
   }
+
+  #add-user {
+    width: 70%;
+    margin-bottom: 2rem;
+    margin-top: 0;
+  }
 </style>
