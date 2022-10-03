@@ -33,7 +33,7 @@ const users = [
 ];
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Get users
 app.get('/api/users', (req, res) => {
@@ -55,6 +55,15 @@ app.post('/api/delete', (req, res) => {
   res.json('User removed');
 });
 
+//Edit password
+app.post('/api/edit', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const index = users.findIndex((el) => el.email === email);
+  users[index].password = password;
+  res.json('Password changed');
+});
+
 //Make admin
 app.post('/api/admin', (req, res) => {
   const email = req.body.email;
@@ -72,7 +81,7 @@ app.get('/api/current/:email', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
 app.listen(port, () => {

@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import UserList from '@/components/UserList.vue';
 import UserInfo from '@/components/UserInfo.vue';
 import Login from '@/components/Login.vue';
+import EditPassword from '../components/EditPassword.vue';
 
 import store from '../store/index.js';
 import swal from 'sweetalert';
@@ -21,6 +22,12 @@ const routes = [
     name: 'UserList',
     component: UserList,
     meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: '/edit',
+    name: 'EditPassword',
+    component: EditPassword,
+    meta: { requiresAuth: true },
   },
   {
     path: '/info',

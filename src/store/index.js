@@ -53,6 +53,14 @@ export default createStore({
         body: JSON.stringify({ email }),
       });
     },
+    async changePassword(state, { email, password }) {
+      state.curUser.password = password;
+      await fetch('/api/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+    },
     setCurrentUser(state, data) {
       state.curUser = data;
     },
@@ -84,6 +92,9 @@ export default createStore({
     },
     setAuthentication({ commit }, { isLoggedIn, admin }) {
       commit('setAuthentication', { isLoggedIn, admin });
+    },
+    changePassword({ commit }, { email, password }) {
+      commit('changePassword', { email, password });
     },
   },
 });
