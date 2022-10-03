@@ -4,6 +4,8 @@ export default createStore({
   state: {
     users: [],
     curUser: {},
+    isLoggedIn: false,
+    isAdmin: false,
   },
   getters: {
     getUsers(state) {
@@ -11,6 +13,12 @@ export default createStore({
     },
     getCurUser(state) {
       return state.curUser;
+    },
+    isLoggedIn(state) {
+      return state.isLoggedIn;
+    },
+    isAdmin(state) {
+      return state.isAdmin;
     },
   },
   mutations: {
@@ -48,6 +56,10 @@ export default createStore({
     setCurrentUser(state, data) {
       state.curUser = data;
     },
+    setAuthentication(state, isLoggedIn, admin) {
+      state.isLoggedIn = isLoggedIn;
+      state.isAdmin = admin;
+    },
   },
   actions: {
     fetchAllUsers({ commit }) {
@@ -69,6 +81,9 @@ export default createStore({
     removeUser({ commit }, email) {
       commit('removeUser', email);
       commit('fetchAllUsers');
+    },
+    setAuthentication({ commit }, isLoggedIn, admin) {
+      commit('setAuthentication', isLoggedIn, admin);
     },
   },
 });
