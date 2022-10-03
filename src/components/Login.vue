@@ -130,10 +130,8 @@
 
         this.emailInvalid = false;
         this.passwordInvalid = false;
-
         const valid = this.validateForm();
         if (!valid) return;
-
         this.registrationMode ? this.onRegister() : this.onLogin();
       },
       validateForm() {
@@ -157,8 +155,8 @@
         const invalid = Object.values(this.validation).findIndex(
           (el) => el === true
         );
-        if (invalid >= 0) return false;
-        return true;
+        if (invalid >= 0) return true;
+        return false;
       },
       onLogin() {
         this.$store.dispatch('getCurrentUser', this.email);

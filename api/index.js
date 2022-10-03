@@ -33,7 +33,7 @@ const users = [
 ];
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../ui/build')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Get users
 app.get('/api/users', (req, res) => {
@@ -72,7 +72,7 @@ app.get('/api/current/:email', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../ui/build/index.html'));
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
 app.listen(port, () => {
