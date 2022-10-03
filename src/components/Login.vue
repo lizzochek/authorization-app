@@ -123,13 +123,15 @@
     methods: {
       toggleRegistation() {
         this.registrationMode = !this.registrationMode;
+        this.clearValidation();
+      },
+      clearValidation() {
         Object.keys(this.validation).map((el) => (this.validation[el] = false));
       },
       onFormSubmit(e) {
         e.preventDefault();
 
-        this.emailInvalid = false;
-        this.passwordInvalid = false;
+        this.clearValidation();
         const valid = this.validateForm();
         if (!valid) return;
         this.registrationMode ? this.onRegister() : this.onLogin();
@@ -138,25 +140,31 @@
         if (this.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) === -1)
           this.validation.emailInvalid = true;
         if (this.password.length < 8) this.validation.passwordInvalid = true;
-        if (this.name.search(/\w+\s+[A-Z]\.+[A-Z]\./) === -1)
-          this.validation.nameInvalid = true;
-        if (this.group.search(/[A-za-z][A-za-z]+\-+[0-9][0-9]/) === -1)
-          this.validation.groupInvalid = true;
-        if (
-          this.phone.search(/((\(\d{3}\) ?)|(\d{3}-))?\-\d{3}-\d{2}-\d{2}/) ===
-          -1
-        )
-          this.validation.phoneInvalid = true;
-        if (this.idCard.search(/[A-Z][A-Z]+\s+\№\d{6}/) === -1)
-          this.validation.idInvalid = true;
-        if (this.faculty.search(/[A-Z]{4}/) === -1)
-          this.validation.facultyInvalid = true;
+
+        if (this.registrationMode) {
+          if (this.name.search(/\w+\s+[A-Z]\.+[A-Z]\./) === -1)
+            this.validation.nameInvalid = true;
+          if (this.group.search(/[A-za-z][A-za-z]+\-+[0-9][0-9]/) === -1)
+            this.validation.groupInvalid = true;
+          if (
+            this.phone.search(
+              /((\(\d{3}\) ?)|(\d{3}-))?\-\d{3}-\d{2}-\d{2}/
+            ) === -1
+          )
+            this.validation.phoneInvalid = true;
+          if (this.idCard.search(/[A-Z][A-Z]+\s+\№\d{6}/) === -1)
+            this.validation.idInvalid = true;
+          if (this.faculty.search(/[A-Z]{4}/) === -1)
+            this.validation.facultyInvalid = true;
+        }
 
         const invalid = Object.values(this.validation).findIndex(
           (el) => el === true
         );
-        if (invalid >= 0) return true;
-        return false;
+        console.log(this.validation);
+        console.log(invalid);
+        if (invalid >= 0) return false;
+        return true;
       },
       onLogin() {
         this.$store.dispatch('getCurrentUser', this.email);
